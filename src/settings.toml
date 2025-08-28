@@ -1,0 +1,17 @@
+[api]
+public_key = ""
+secret_key = ""
+
+[position]
+symbol = "ETHUSDT"
+coin_precision = 2
+tp_ratio = 0.0050
+sl_ratio = 0.0050
+leverage = 1
+
+[runtime]
+test_mode = true
+interval = "15m"
+
+[output]
+csv_path = "./results.csv"
