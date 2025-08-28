@@ -1,4 +1,4 @@
-from bot.bot_settings import BotSettings as SETTINGS
+from bot.bot_settings import SETTINGS
 from binance.client import Client
 
 class AccountManager:

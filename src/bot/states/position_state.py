@@ -1,9 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-from typing import final
+from typing import final, Any
 from utils.logger import Logger
-from bot.rem_bot import RemBot
-
 
 class PositionState(ABC):
     """
@@ -14,15 +12,15 @@ class PositionState(ABC):
     to define specific trading logic.
     """
 
-    def __init__(self, parent: RemBot) -> None:
+    def __init__(self, parent: Any) -> None:
         """
         Initialize a PositionState.
 
         Args:
-            parent (RemBot): The RemBot instance that manages trading logic,
+            parent (Any): The RemBot object reference that manages trading logic,
                              containing shared resources like DataManager and BinanceAdapter.
         """
-        self.parent: RemBot = parent
+        self.parent: Any = parent
 
     @final
     def step(self) -> None:

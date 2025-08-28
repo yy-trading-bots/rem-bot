@@ -2,9 +2,6 @@ from __future__ import annotations
 
 from bot.states.position_state import PositionState
 from utils.logger import Logger
-from bot.states.long_position_state import LongPositionState
-from bot.states.short_position_state import ShortPositionState
-
 
 class NoPositionState(PositionState):
     """
@@ -97,6 +94,7 @@ class NoPositionState(PositionState):
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
 
+        from bot.states.long_position_state import LongPositionState
         self.parent.state = LongPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
         )
@@ -128,6 +126,7 @@ class NoPositionState(PositionState):
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
 
+        from bot.states.short_position_state import ShortPositionState
         self.parent.state = ShortPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
         )

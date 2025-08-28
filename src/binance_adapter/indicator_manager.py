@@ -3,7 +3,7 @@ from typing import Any, Optional, List, Tuple
 import numpy as np
 import talib
 import pandas as pd
-from bot.bot_settings import BotSettings as SETTINGS
+from bot.bot_settings import SETTINGS
 from data.indicator_snapshot import IndicatorSnapshot
 from utils.date_utils import DateUtils
 from binance.client import Client

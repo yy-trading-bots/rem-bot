@@ -3,5 +3,5 @@ pandas
 python-binance
 TA-Lib
 termcolor
+colorama
 tomli
-csv

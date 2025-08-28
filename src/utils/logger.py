@@ -1,6 +1,8 @@
 from termcolor import colored
 from utils.date_utils import DateUtils
+from colorama import init
 
+init(autoreset=True)
 
 class Logger:
     """

@@ -1,6 +1,6 @@
 from typing import Tuple
 from binance_adapter.account_manager import AccountManager
-from bot.bot_settings import BotSettings as SETTINGS
+from bot.bot_settings import SETTINGS
 from binance_adapter.indicator_manager import IndicatorManager
 from binance.client import Client
 

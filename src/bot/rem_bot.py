@@ -6,7 +6,6 @@ from bot.states.no_position_state import NoPositionState
 from bot.states.position_state import PositionState
 from bot.bot_settings import SETTINGS
 from binance_adapter.binance_adapter import BinanceAdapter
-from binance.client import Client
 from utils.logger import Logger
 from time import sleep
 
@@ -35,7 +34,9 @@ class RemBot:
         self.data_manager: DataManager = DataManager()
         self.binance_adapter: BinanceAdapter = BinanceAdapter()
         Logger.log_start("RemBot is running...")
+        print()
         self.initial_block()
+        print()
         self.state: PositionState = NoPositionState(parent=self)
 
     def initial_block(self) -> None:

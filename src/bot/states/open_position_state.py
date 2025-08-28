@@ -1,19 +1,13 @@
 from __future__ import annotations
 
 from abc import abstractmethod
-from typing import Callable, Sequence, Literal, TYPE_CHECKING
-
+from typing import Callable, Sequence, Literal, Any
 from bot.states.position_state import PositionState
 from utils.logger import Logger
 from utils.file_utils import FileUtils
-from bot.states.no_position_state import NoPositionState
 from bot.bot_settings import SETTINGS
 from data.indicator_snapshot import IndicatorSnapshot
 from bot.performance_tracker import PerformanceTracker
-
-if TYPE_CHECKING:
-    from bot.rem_bot import RemBot
-
 
 class OpenPositionState(PositionState):
     """
@@ -23,17 +17,17 @@ class OpenPositionState(PositionState):
     the price-condition checks for take-profit and stop-loss.
     """
 
-    def __init__(self, parent: RemBot, target_prices: Sequence[float]) -> None:
+    def __init__(self, parent: Any, target_prices: Sequence[float]) -> None:
         """
         Initialize the open position state.
 
         Args:
-            parent (RemBot): The trading bot instance holding shared resources.
+            parent (Any): The trading bot instance referance holding shared resources.
             target_prices (Sequence[float]): A 2-item sequence where index 0 is
                 the take-profit price and index 1 is the stop-loss price.
         """
         super().__init__(parent)
-        self.parent: RemBot = parent
+        self.parent: Any = parent
         self.tp_price: float = float(target_prices[0])
         self.sl_price: float = float(target_prices[1])
 
@@ -65,7 +59,8 @@ class OpenPositionState(PositionState):
             + " SL: " + str(pf_tracker.loss_count)
             + " Win-Rate: " + pf_tracker.calculate_win_rate()
         )
-
+        print()
+        from bot.states.no_position_state import NoPositionState
         self.parent.state = NoPositionState(parent=self.parent)
 
 
