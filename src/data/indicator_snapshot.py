@@ -1,7 +1,6 @@
 from typing import Tuple, Sequence, List, Optional
 import copy
 
-
 class IndicatorSnapshot:
     """
     Container for a single snapshot of technical indicators.

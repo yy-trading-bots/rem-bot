@@ -1,12 +1,13 @@
 from __future__ import annotations
 from bot.states.open_position_state import OpenPositionState
 
+
 class LongPositionState(OpenPositionState):
     """
     Represents an open LONG trading position.
 
-    This state continuously monitors whether the take-profit (TP) 
-    or stop-loss (SL) conditions are met. If one of these conditions 
+    This state continuously monitors whether the take-profit (TP)
+    or stop-loss (SL) conditions are met. If one of these conditions
     is satisfied, it closes the position and updates the bot's state accordingly.
     """
 

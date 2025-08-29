@@ -34,9 +34,7 @@ class RemBot:
         self.data_manager: DataManager = DataManager()
         self.binance_adapter: BinanceAdapter = BinanceAdapter()
         Logger.log_start("RemBot is running...")
-        print()
         self.initial_block()
-        print()
         self.state: PositionState = NoPositionState(parent=self)
 
     def initial_block(self) -> None:
@@ -52,6 +50,8 @@ class RemBot:
             self.binance_adapter.indicator_manager.fetch_indicators()
         )
         temp_snapshot_alias = self.data_manager.indicator_snapshot
+        if SETTINGS.DEBUG_MODE:
+            Logger.log_info("debug: " + str(temp_snapshot_alias))
         if temp_snapshot_alias.price < temp_snapshot_alias.ema_100:
             self.data_manager.block_long()
         else:

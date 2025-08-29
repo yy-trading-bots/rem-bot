@@ -1,12 +1,13 @@
 from datetime import datetime, timedelta
-from typing import Any, Optional, List, Tuple
+from typing import Optional, List, Tuple
 import numpy as np
 import talib
 import pandas as pd
+from binance.client import Client
 from bot.bot_settings import SETTINGS
 from data.indicator_snapshot import IndicatorSnapshot
 from utils.date_utils import DateUtils
-from binance.client import Client
+
 
 class IndicatorManager:
     """
@@ -33,14 +34,25 @@ class IndicatorManager:
         klines = self.client.get_historical_klines(
             symbol=SETTINGS.SYMBOL,
             interval=SETTINGS.INTERVAL,
-            start_str="1 month ago UTC"
+            start_str="1 month ago UTC",
         )
-        df = pd.DataFrame(klines, columns=[
-            "timestamp", "open", "high", "low", "close", "volume",
-            "close_time", "quote_asset_volume", "number_of_trades",
-            "taker_buy_base_asset_volume", "taker_buy_quote_asset_volume",
-            "ignore"
-        ])
+        df = pd.DataFrame(
+            klines,
+            columns=[
+                "timestamp",
+                "open",
+                "high",
+                "low",
+                "close",
+                "volume",
+                "close_time",
+                "quote_asset_volume",
+                "number_of_trades",
+                "taker_buy_base_asset_volume",
+                "taker_buy_quote_asset_volume",
+                "ignore",
+            ],
+        )
         return df["close"].astype(float).to_numpy()
 
     def _fetch_price(self) -> float:
@@ -55,7 +67,9 @@ class IndicatorManager:
             return float(ticker["price"])
         return 0.0
 
-    def _get_historical_data(self, limit: int = 15) -> List[Tuple[float, float, float, float]]:
+    def _get_historical_data(
+        self, limit: int = 15
+    ) -> List[Tuple[float, float, float, float]]:
         """
         Retrieve OHLCV candlestick data for the configured symbol.
 
@@ -75,7 +89,7 @@ class IndicatorManager:
             interval=SETTINGS.INTERVAL,
             limit=limit,
             startTime=start_time_ms,
-            endTime=end_time_ms
+            endTime=end_time_ms,
         )
 
         return [
@@ -83,7 +97,9 @@ class IndicatorManager:
             for kline in klines
         ]
 
-    def _calculate_EMA(self, period: int, close_prices: Optional[np.ndarray] = None) -> float:
+    def _calculate_EMA(
+        self, period: int, close_prices: Optional[np.ndarray] = None
+    ) -> float:
         """
         Calculate the Exponential Moving Average (EMA).
 
@@ -95,7 +111,9 @@ class IndicatorManager:
         Returns:
             float: The latest EMA value.
         """
-        close_prices = self._get_close_prices() if close_prices is None else close_prices
+        close_prices = (
+            self._get_close_prices() if close_prices is None else close_prices
+        )
         ema = talib.EMA(close_prices, timeperiod=period)
         return float(ema[-1])
 
@@ -103,7 +121,7 @@ class IndicatorManager:
         self,
         macd_period: int,
         signal_period: int,
-        close_prices: Optional[np.ndarray] = None
+        close_prices: Optional[np.ndarray] = None,
     ) -> Tuple[float, float]:
         """
         Calculate the Moving Average Convergence Divergence (MACD) indicator.
@@ -117,16 +135,20 @@ class IndicatorManager:
         Returns:
             Tuple[float, float]: Latest MACD and signal line values.
         """
-        close_prices = self._get_close_prices() if close_prices is None else close_prices
+        close_prices = (
+            self._get_close_prices() if close_prices is None else close_prices
+        )
         macd, signal, _ = talib.MACD(
             close_prices,
             fastperiod=macd_period,
             slowperiod=signal_period,
-            signalperiod=signal_period
+            signalperiod=signal_period,
         )
         return float(macd[-1]), float(signal[-1])
 
-    def _calculate_RSI(self, period: int, close_prices: Optional[np.ndarray] = None) -> float:
+    def _calculate_RSI(
+        self, period: int, close_prices: Optional[np.ndarray] = None
+    ) -> float:
         """
         Calculate the Relative Strength Index (RSI).
 
@@ -138,10 +160,12 @@ class IndicatorManager:
         Returns:
             float: The latest RSI value.
         """
-        close_prices = self._get_close_prices() if close_prices is None else close_prices
+        close_prices = (
+            self._get_close_prices() if close_prices is None else close_prices
+        )
         rsi = talib.RSI(close_prices, timeperiod=period)
         return float(rsi[-1])
-    
+
     def fetch_indicators(self) -> IndicatorSnapshot:
         """
         Fetch and calculate all configured indicators for the trading symbol.
@@ -151,9 +175,7 @@ class IndicatorManager:
         """
         close_prices = self._get_close_prices()
         temp_macd_12, temp_macd_26 = self._calculate_MACD(
-            macd_period=12,
-            signal_period=26,
-            close_prices=close_prices
+            macd_period=12, signal_period=26, close_prices=close_prices
         )
 
         return IndicatorSnapshot(
@@ -163,5 +185,5 @@ class IndicatorManager:
             macd_26=temp_macd_26,
             ema_100=self._calculate_EMA(period=100, close_prices=close_prices),
             rsi_6=self._calculate_RSI(period=6, close_prices=close_prices),
-            bar_list=self._get_historical_data()
+            bar_list=self._get_historical_data(),
         )

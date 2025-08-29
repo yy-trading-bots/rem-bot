@@ -4,6 +4,7 @@ from colorama import init
 
 init(autoreset=True)
 
+
 class Logger:
     """
     Console logger with colored output.
@@ -41,7 +42,9 @@ class Logger:
         Args:
             message (str): The failure message to log.
         """
-        cls._log("dark_red" if "dark_red" in colored.__code__.co_consts else "red", message)
+        cls._log(
+            "dark_red" if "dark_red" in colored.__code__.co_consts else "red", message
+        )
 
     @classmethod
     def log_info(cls, message: str) -> None:

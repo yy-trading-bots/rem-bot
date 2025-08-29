@@ -9,6 +9,7 @@ from bot.bot_settings import SETTINGS
 from data.indicator_snapshot import IndicatorSnapshot
 from bot.performance_tracker import PerformanceTracker
 
+
 class OpenPositionState(PositionState):
     """
     Base class for states that manage an open trading position.
@@ -34,7 +35,9 @@ class OpenPositionState(PositionState):
     def _close_position(
         self,
         position: Literal["LONG", "SHORT"],
-        result_function: Callable[[Literal["LONG", "SHORT"], IndicatorSnapshot, PerformanceTracker], None],
+        result_function: Callable[
+            [Literal["LONG", "SHORT"], IndicatorSnapshot, PerformanceTracker], None
+        ],
     ) -> None:
         """
         Close the current position and transition back to NoPositionState.
@@ -55,14 +58,17 @@ class OpenPositionState(PositionState):
         result_function(position, snapshot, pf_tracker)
 
         Logger.log_info(
-            "TP: " + str(pf_tracker.win_count)
-            + " SL: " + str(pf_tracker.loss_count)
-            + " Win-Rate: " + pf_tracker.calculate_win_rate()
+            "TP: "
+            + str(pf_tracker.win_count)
+            + " SL: "
+            + str(pf_tracker.loss_count)
+            + " Win-Rate: "
+            + pf_tracker.calculate_win_rate()
         )
-        print()
-        from bot.states.no_position_state import NoPositionState
-        self.parent.state = NoPositionState(parent=self.parent)
 
+        from bot.states.no_position_state import NoPositionState
+
+        self.parent.state = NoPositionState(parent=self.parent)
 
     def _handle_tp(
         self,
@@ -120,7 +126,9 @@ class OpenPositionState(PositionState):
             snapshot=snapshot,
         )
 
-    def _get_position_result(self, position: Literal["LONG", "SHORT"], is_tp: bool) -> str:
+    def _get_position_result(
+        self, position: Literal["LONG", "SHORT"], is_tp: bool
+    ) -> str:
         """
         Convert a position side and TP/SL flag into a result label.
 

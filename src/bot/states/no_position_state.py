@@ -3,6 +3,7 @@ from __future__ import annotations
 from bot.states.position_state import PositionState
 from utils.logger import Logger
 
+
 class NoPositionState(PositionState):
     """
     State representing the absence of any open position.
@@ -83,7 +84,6 @@ class NoPositionState(PositionState):
         price: float = self.parent.data_manager.position_snapshot.price
         tp_price, sl_price = self.parent.binance_adapter.enter_long(price)
 
-        print()
         Logger.log_info(
             "Entered LONG Current: "
             + str(round(price, 2))
@@ -95,6 +95,7 @@ class NoPositionState(PositionState):
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
 
         from bot.states.long_position_state import LongPositionState
+
         self.parent.state = LongPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
         )
@@ -115,7 +116,6 @@ class NoPositionState(PositionState):
         price: float = self.parent.data_manager.position_snapshot.price
         tp_price, sl_price = self.parent.binance_adapter.enter_short(price)
 
-        print()
         Logger.log_info(
             "Entered SHORT Current: "
             + str(round(price, 2))
@@ -127,6 +127,7 @@ class NoPositionState(PositionState):
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
 
         from bot.states.short_position_state import ShortPositionState
+
         self.parent.state = ShortPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
         )

@@ -11,7 +11,9 @@ leverage = 1
 
 [runtime]
 test_mode = true
+debug_mode = false
 interval = "15m"
+sleep_duration = 20.0
 
 [output]
 csv_path = "./results.csv"

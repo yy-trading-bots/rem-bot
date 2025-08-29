@@ -5,3 +5,6 @@ TA-Lib
 termcolor
 colorama
 tomli
+pytest
+pytest-cov
+coverage

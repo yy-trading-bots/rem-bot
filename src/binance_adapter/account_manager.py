@@ -1,10 +1,11 @@
 from bot.bot_settings import SETTINGS
 from binance.client import Client
 
+
 class AccountManager:
     """
-    Manages account operations such as retrieving balances, 
-    calculating order quantities, and placing futures orders 
+    Manages account operations such as retrieving balances,
+    calculating order quantities, and placing futures orders
     (market, take-profit, and stop-loss) on Binance.
     """
 

@@ -4,6 +4,7 @@ from typing import Union, Iterable, Any, Dict
 from data.indicator_snapshot import IndicatorSnapshot
 import tomli
 
+
 class FileUtils:
     """
     Utility class for file operations including:
@@ -12,7 +13,16 @@ class FileUtils:
         - Reading configuration from TOML files
     """
 
-    _HEADER = ["date", "result", "position", "price", "macd_12", "macd_26", "ema_100", "rsi_6"]
+    _HEADER = [
+        "date",
+        "result",
+        "position",
+        "price",
+        "macd_12",
+        "macd_26",
+        "ema_100",
+        "rsi_6",
+    ]
 
     @staticmethod
     def _ensure_parent(path: Union[str, Path]) -> None:
@@ -61,7 +71,7 @@ class FileUtils:
         file_path: Union[str, Path],
         result: str,
         position: str,
-        snapshot: IndicatorSnapshot
+        snapshot: IndicatorSnapshot,
     ) -> None:
         """
         Save a trading result into a CSV file.

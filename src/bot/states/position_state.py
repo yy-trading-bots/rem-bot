@@ -2,6 +2,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import final, Any
 from utils.logger import Logger
+from bot.bot_settings import SETTINGS
+
 
 class PositionState(ABC):
     """
@@ -33,6 +35,10 @@ class PositionState(ABC):
         """
         try:
             self._refresh_indicators()
+            if SETTINGS.DEBUG_MODE:
+                Logger.log_info(
+                    "debug: " + str(self.parent.data_manager.indicator_snapshot)
+                )
             self.apply()
         except Exception as e:
             Logger.log_exception(str(e))

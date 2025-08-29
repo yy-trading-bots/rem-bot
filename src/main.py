@@ -1,5 +1,6 @@
 from bot.rem_bot import RemBot
 
+
 def main() -> None:
     """
     Entry point of the trading bot.
@@ -8,6 +9,7 @@ def main() -> None:
     """
     rembot: RemBot = RemBot()
     rembot.run()
+
 
 if __name__ == "__main__":
     main()
