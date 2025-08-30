@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Write ./src/settings.toml (UTF-8 without BOM)
+      - name: Write ./src/settings.toml
         run: |
           New-Item -ItemType Directory -Path ./src -Force | Out-Null
           $content = @'

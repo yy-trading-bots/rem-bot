@@ -78,9 +78,7 @@ class NoPositionState(PositionState):
             - Places TP/SL via the exchange adapter (in non-test mode).
             - Logs entry details.
         """
-        self.parent.data_manager.block_long()
         self._update_position_snapshot()
-
         price: float = self.parent.data_manager.position_snapshot.price
         tp_price, sl_price = self.parent.binance_adapter.enter_long(price)
 
@@ -93,7 +91,7 @@ class NoPositionState(PositionState):
             + str(round(sl_price, 2))
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
-
+        self.parent.data_manager.block_long()
         from bot.states.long_position_state import LongPositionState
 
         self.parent.state = LongPositionState(
@@ -110,7 +108,6 @@ class NoPositionState(PositionState):
             - Places TP/SL via the exchange adapter (in non-test mode).
             - Logs entry details.
         """
-        self.parent.data_manager.block_short()
         self._update_position_snapshot()
 
         price: float = self.parent.data_manager.position_snapshot.price
@@ -125,7 +122,7 @@ class NoPositionState(PositionState):
             + str(round(sl_price, 2))
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
-
+        self.parent.data_manager.block_short()
         from bot.states.short_position_state import ShortPositionState
 
         self.parent.state = ShortPositionState(
