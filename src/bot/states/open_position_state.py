@@ -116,7 +116,7 @@ class OpenPositionState(PositionState):
             - Persists the SL result to CSV.
             - Logs the outcome.
         """
-        Logger.log_success("Position is closed with SL")
+        Logger.log_failure("Position is closed with SL")
         performance_tracker.increase_loss()
         FileUtils.save_result(
             file_path=SETTINGS.OUTPUT_CSV_PATH,

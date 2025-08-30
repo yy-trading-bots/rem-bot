@@ -98,9 +98,9 @@ def test_handle_sl_increases_loss_and_saves(monkeypatch):
     instance = ConcreteOpen(parent=parent, target_prices=[100.0, 90.0])
     snapshot = FakeMarketSnapshot(price=111.0)
 
-    success_logs: list[str] = []
+    failure_logs: list[str] = []
     monkeypatch.setattr(
-        open_pos_module.Logger, "log_success", lambda msg: success_logs.append(msg)
+        open_pos_module.Logger, "log_failure", lambda msg: failure_logs.append(msg)
     )
 
     saved: dict[str, Any] = {}
@@ -123,7 +123,7 @@ def test_handle_sl_increases_loss_and_saves(monkeypatch):
     )
 
     assert tracker.loss_count == 1
-    assert success_logs == ["Position is closed with SL"]
+    assert failure_logs == ["Position is closed with SL"]
     assert saved["position"] == "SHORT"
     assert saved["result"] == "LONG"
     assert saved["snapshot"] is snapshot
