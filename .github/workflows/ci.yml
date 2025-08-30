@@ -10,26 +10,7 @@ defaults:
 
 jobs:
   setup_environment:
-    runs-on: [self-hosted, Windows]
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Create virtual environment
-        run: python -m venv .venv
-
-      - name: Install dependencies
-        run: .\.venv\Scripts\pip install -r requirements.txt
-
-      - name: Pack venv
-        run: Compress-Archive -Path .venv -DestinationPath venv.zip -Force
-
-      - name: Upload venv artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: venv-artifact
-          path: venv.zip
-          if-no-files-found: error
-          retention-days: 1
+    uses: ./.github/workflows/setup-environment.yml
 
   generate_settings:
     needs: setup_environment
@@ -39,25 +20,5 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
   run_tests:
-    runs-on: [self-hosted, Windows]
-    needs: generate_settings
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Download venv
-        uses: actions/download-artifact@v4
-        with:
-          name: venv-artifact
-          path: .
-
-      - name: Unpack venv
-        run: Expand-Archive -Path venv.zip -DestinationPath . -Force
-
-      - name: Download settings.toml
-        uses: actions/download-artifact@v4
-        with:
-          name: settings-artifact
-          path: .
-
-      - name: Run tests
-        run: .\.venv\Scripts\pytest -v
+    needs: [setup_environment, generate_settings]
+    uses: ./.github/workflows/run-tests.yml
