@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Write ./src/settings.toml
+      - name: Write ./src/settings.toml (UTF-8 without BOM)
         run: |
           New-Item -ItemType Directory -Path ./src -Force | Out-Null
           $content = @'
@@ -43,8 +43,9 @@ jobs:
           CSV_PATH = "./results.csv"
           '@
 
+          $path = Join-Path -Path (Get-Location) -ChildPath 'src\settings.toml'
           $enc = New-Object System.Text.UTF8Encoding $false
-          [System.IO.File]::WriteAllText((Resolve-Path './src/settings.toml'), $content, $enc)
+          [System.IO.File]::WriteAllText($path, $content, $enc)
 
       - name: Upload settings artifact
         uses: actions/upload-artifact@v4
