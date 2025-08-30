@@ -42,7 +42,9 @@ jobs:
           [OUTPUT]
           CSV_PATH = "./results.csv"
           '@
-          Set-Content -Path ./src/settings.toml -Value $content -Encoding UTF8
+
+          $enc = New-Object System.Text.UTF8Encoding $false
+          [System.IO.File]::WriteAllText((Resolve-Path './src/settings.toml'), $content, $enc)
 
       - name: Upload settings artifact
         uses: actions/upload-artifact@v4
