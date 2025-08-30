@@ -19,9 +19,8 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Write ./src/settings.toml
-        shell: powershell
         run: |
-          New-Item -ItemType Directory -Path .\src -Force | Out-Null
+          New-Item -ItemType Directory -Path ./src -Force | Out-Null
           $content = @'
           [API]
           PUBLIC_KEY = "${{ secrets.PUBLIC_KEY }}"
@@ -43,7 +42,7 @@ jobs:
           [OUTPUT]
           CSV_PATH = "./results.csv"
           '@
-          Set-Content -Path .\src\settings.toml -Value $content -Encoding UTF8
+          Set-Content -Path ./src/settings.toml -Value $content -Encoding UTF8
 
       - name: Upload settings artifact
         uses: actions/upload-artifact@v4
