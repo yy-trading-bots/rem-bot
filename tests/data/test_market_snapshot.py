@@ -1,9 +1,9 @@
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 
 
 def test_init_converts_numbers_and_copies_bar_list():
     src_bars = [(10.0, 11.0, 9.0, 12.0), (20.5, 21.5, 19.0, 22.0)]
-    snap = IndicatorSnapshot(
+    snap = MarketSnapshot(
         date="2025-08-29 00:00",
         price=100,  # int -> float
         macd_12=1,  # int -> float
@@ -25,7 +25,7 @@ def test_init_converts_numbers_and_copies_bar_list():
 
 
 def test_str_formatting_two_decimals():
-    snap = IndicatorSnapshot(
+    snap = MarketSnapshot(
         date="2025-08-29 00:00",
         price=123.456,
         macd_12=1.234,
@@ -39,7 +39,7 @@ def test_str_formatting_two_decimals():
 
 
 def test_clone_returns_deep_copy_and_is_independent():
-    original = IndicatorSnapshot(
+    original = MarketSnapshot(
         date="2025-08-29 00:00",
         price=10.0,
         macd_12=0.1,
@@ -75,7 +75,7 @@ def test_clone_returns_deep_copy_and_is_independent():
 
 
 def test_default_bar_list_is_empty_and_independent():
-    s1 = IndicatorSnapshot(
+    s1 = MarketSnapshot(
         date="2025-08-29 00:00",
         price=1.0,
         macd_12=0.0,
@@ -84,7 +84,7 @@ def test_default_bar_list_is_empty_and_independent():
         rsi_6=50.0,
         bar_list=None,
     )
-    s2 = IndicatorSnapshot(
+    s2 = MarketSnapshot(
         date="2025-08-29 00:01",
         price=2.0,
         macd_12=0.0,

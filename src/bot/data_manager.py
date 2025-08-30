@@ -1,4 +1,4 @@
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 from utils.logger import Logger
 
 
@@ -18,14 +18,14 @@ class DataManager:
         Attributes:
             is_long_blocked (bool): Flag indicating whether LONG entries are blocked.
             is_short_blocked (bool): Flag indicating whether SHORT entries are blocked.
-            indicator_snapshot (IndicatorSnapshot): Latest fetched market indicators.
-            position_snapshot (IndicatorSnapshot): Snapshot of the market
+            market_snapshot (MarketSnapshot): Latest fetched market indicators.
+            position_snapshot (MarketSnapshot): Snapshot of the market
                 at the moment a position is opened.
         """
         self.is_long_blocked: bool = False
         self.is_short_blocked: bool = False
-        self.indicator_snapshot: IndicatorSnapshot
-        self.position_snapshot: IndicatorSnapshot
+        self.market_snapshot: MarketSnapshot
+        self.position_snapshot: MarketSnapshot
 
     def block_short(self) -> None:
         """

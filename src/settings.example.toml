@@ -1,19 +1,19 @@
-[api]
-public_key = ""
-secret_key = ""
+[API]
+PUBLIC_KEY = ""
+SECRET_KEY = ""
 
-[position]
-symbol = "ETHUSDT"
-coin_precision = 2
-tp_ratio = 0.0050
-sl_ratio = 0.0050
-leverage = 1
+[POSITION]
+SYMBOL = "ETHUSDT"
+COIN_PRECISION = 2
+TP_RATIO = 0.0050
+SL_RATIO = 0.0050
+LEVERAGE = 1
 
-[runtime]
-test_mode = true
-debug_mode = false
-interval = "15m"
-sleep_duration = 20.0
+[RUNTIME]
+TEST_MODE = true
+DEBUG_MODE = false
+INTERVAL = "15m"
+SLEEP_DURATION = 30.0
 
-[output]
-csv_path = "./results.csv"
+[OUTPUT]
+CSV_PATH = "./results.csv"

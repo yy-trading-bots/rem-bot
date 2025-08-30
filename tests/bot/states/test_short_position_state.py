@@ -8,7 +8,7 @@ class Snapshot:
 
 class DataManager:
     def __init__(self, snapshot: Snapshot) -> None:
-        self.indicator_snapshot = snapshot
+        self.market_snapshot = snapshot
 
 
 class Parent:
@@ -21,7 +21,7 @@ def test_is_tp_price_true_and_boundary():
     sps = ShortPositionState(parent=parent, target_prices=[80.0, 120.0])
     assert sps._is_tp_price() is True
 
-    parent.data_manager.indicator_snapshot.price = 80.0
+    parent.data_manager.market_snapshot.price = 80.0
     assert sps._is_tp_price() is False
 
 
@@ -30,7 +30,7 @@ def test_is_sl_price_true_and_boundary():
     sps = ShortPositionState(parent=parent, target_prices=[80.0, 120.0])
     assert sps._is_sl_price() is True
 
-    parent.data_manager.indicator_snapshot.price = 120.0
+    parent.data_manager.market_snapshot.price = 120.0
     assert sps._is_sl_price() is False
 
 

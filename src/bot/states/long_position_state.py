@@ -32,7 +32,7 @@ class LongPositionState(OpenPositionState):
         Returns:
             bool: True if the current price is greater than the TP price; otherwise False.
         """
-        snapshot = self.parent.data_manager.indicator_snapshot
+        snapshot = self.parent.data_manager.market_snapshot
         return snapshot.price > self.tp_price
 
     def _is_sl_price(self) -> bool:
@@ -42,5 +42,5 @@ class LongPositionState(OpenPositionState):
         Returns:
             bool: True if the current price is lower than the SL price; otherwise False.
         """
-        snapshot = self.parent.data_manager.indicator_snapshot
+        snapshot = self.parent.data_manager.market_snapshot
         return snapshot.price < self.sl_price

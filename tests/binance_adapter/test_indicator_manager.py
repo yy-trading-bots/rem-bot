@@ -253,13 +253,13 @@ def test_fetch_indicators_integration_and_constructor_call(
         indicator_manager_module.DateUtils, "get_date", lambda: "2025-08-27T00:00:00Z"
     )
 
-    # Replace IndicatorSnapshot to capture constructor kwargs
+    # Replace MarketSnapshot to capture constructor kwargs
     class FakeSnapshot:
         def __init__(self, **kwargs):
             self.kwargs = kwargs
 
     monkeypatch.setattr(
-        indicator_manager_module, "IndicatorSnapshot", FakeSnapshot, raising=False
+        indicator_manager_module, "MarketSnapshot", FakeSnapshot, raising=False
     )
 
     snapshot = indicator_manager.fetch_indicators()
@@ -274,7 +274,7 @@ def test_fetch_indicators_integration_and_constructor_call(
     assert captured_params["ema_close_len"] == 3
     assert captured_params["rsi_close_len"] == 3
 
-    # Verify fields passed to IndicatorSnapshot
+    # Verify fields passed to MarketSnapshot
     expected = {
         "date": "2025-08-27T00:00:00Z",
         "price": 555.0,

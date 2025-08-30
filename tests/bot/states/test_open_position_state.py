@@ -7,14 +7,14 @@ from bot.performance_tracker import PerformanceTracker
 PositionSide = Literal["LONG", "SHORT"]
 
 
-class FakeIndicatorSnapshot:
+class FakeMarketSnapshot:
     def __init__(self, price: float = 0.0) -> None:
         self.price = price
 
 
 class DataManager:
     def __init__(self) -> None:
-        self.indicator_snapshot: Any | None = None
+        self.market_snapshot: Any | None = None
         self.position_snapshot: Any | None = None
 
 
@@ -60,7 +60,7 @@ def test_get_position_result(position: PositionSide, is_tp: bool, expected: str)
 def test_handle_tp_increases_win_and_saves(monkeypatch):
     parent = Parent()
     instance = ConcreteOpen(parent=parent, target_prices=[100.0, 90.0])
-    snapshot = FakeIndicatorSnapshot(price=123.0)
+    snapshot = FakeMarketSnapshot(price=123.0)
 
     success_logs: list[str] = []
     monkeypatch.setattr(
@@ -96,7 +96,7 @@ def test_handle_tp_increases_win_and_saves(monkeypatch):
 def test_handle_sl_increases_loss_and_saves(monkeypatch):
     parent = Parent()
     instance = ConcreteOpen(parent=parent, target_prices=[100.0, 90.0])
-    snapshot = FakeIndicatorSnapshot(price=111.0)
+    snapshot = FakeMarketSnapshot(price=111.0)
 
     success_logs: list[str] = []
     monkeypatch.setattr(
@@ -133,7 +133,7 @@ def test_close_position_calls_handler_logs_and_transitions(monkeypatch):
     parent = Parent()
     instance = ConcreteOpen(parent=parent, target_prices=[100.0, 90.0])
 
-    entry_snapshot = FakeIndicatorSnapshot(price=99.0)
+    entry_snapshot = FakeMarketSnapshot(price=99.0)
     parent.data_manager.position_snapshot = cast(Any, entry_snapshot)
 
     calls: dict[str, Any] = {}

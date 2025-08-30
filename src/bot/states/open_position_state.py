@@ -6,7 +6,7 @@ from bot.states.position_state import PositionState
 from utils.logger import Logger
 from utils.file_utils import FileUtils
 from bot.bot_settings import SETTINGS
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 from bot.performance_tracker import PerformanceTracker
 
 
@@ -36,7 +36,7 @@ class OpenPositionState(PositionState):
         self,
         position: Literal["LONG", "SHORT"],
         result_function: Callable[
-            [Literal["LONG", "SHORT"], IndicatorSnapshot, PerformanceTracker], None
+            [Literal["LONG", "SHORT"], MarketSnapshot, PerformanceTracker], None
         ],
     ) -> None:
         """
@@ -52,7 +52,7 @@ class OpenPositionState(PositionState):
             - Logs the updated win/loss statistics.
             - Transitions the bot state to NoPositionState.
         """
-        snapshot: IndicatorSnapshot = self.parent.data_manager.position_snapshot
+        snapshot: MarketSnapshot = self.parent.data_manager.position_snapshot
         pf_tracker: PerformanceTracker = self.parent.performance_tracker
 
         result_function(position, snapshot, pf_tracker)
@@ -73,7 +73,7 @@ class OpenPositionState(PositionState):
     def _handle_tp(
         self,
         position: Literal["LONG", "SHORT"],
-        snapshot: IndicatorSnapshot,
+        snapshot: MarketSnapshot,
         performance_tracker: PerformanceTracker,
     ) -> None:
         """
@@ -81,7 +81,7 @@ class OpenPositionState(PositionState):
 
         Args:
             position (Literal["LONG", "SHORT"]): The side of the closed position.
-            snapshot (IndicatorSnapshot): Snapshot at the time of entry.
+            snapshot (MarketSnapshot): Snapshot at the time of entry.
             performance_tracker (PerformanceTracker): Tracker for wins/losses.
 
         Actions performed:
@@ -101,7 +101,7 @@ class OpenPositionState(PositionState):
     def _handle_sl(
         self,
         position: Literal["LONG", "SHORT"],
-        snapshot: IndicatorSnapshot,
+        snapshot: MarketSnapshot,
         performance_tracker: PerformanceTracker,
     ) -> None:
         """
@@ -109,7 +109,7 @@ class OpenPositionState(PositionState):
 
         Args:
             position (Literal["LONG", "SHORT"]): The side of the closed position.
-            snapshot (IndicatorSnapshot): Snapshot at the time of entry.
+            snapshot (MarketSnapshot): Snapshot at the time of entry.
             performance_tracker (PerformanceTracker): Tracker for wins/losses.
 
         Actions performed:

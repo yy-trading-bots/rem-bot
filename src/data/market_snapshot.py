@@ -1,7 +1,8 @@
 from typing import Tuple, Sequence, List, Optional
 import copy
 
-class IndicatorSnapshot:
+
+class MarketSnapshot:
     """
     Container for a single snapshot of technical indicators.
 
@@ -61,14 +62,14 @@ class IndicatorSnapshot:
             f"RSI_6: {self.rsi_6:.2f}"
         )
 
-    def clone(self) -> "IndicatorSnapshot":
+    def clone(self) -> "MarketSnapshot":
         """
         Create a deep copy of the snapshot, including the OHLC bar list.
 
         Returns:
-            IndicatorSnapshot: A new snapshot instance with the same values.
+            MarketSnapshot: A new snapshot instance with the same values.
         """
-        return IndicatorSnapshot(
+        return MarketSnapshot(
             date=self.date,
             price=self.price,
             macd_12=self.macd_12,

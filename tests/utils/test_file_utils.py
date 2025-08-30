@@ -4,7 +4,7 @@ import pytest
 
 from utils.file_utils import FileUtils
 import utils.file_utils as file_utils_module
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 
 
 def read_csv(path: Path):
@@ -70,7 +70,7 @@ def test_append_csv_writes_header_then_rows(tmp_path: Path):
 def test_save_result_appends_snapshot_rows_and_header_once(tmp_path: Path):
     out = tmp_path / "r" / "results.csv"
 
-    s1 = IndicatorSnapshot(
+    s1 = MarketSnapshot(
         date="2025-08-29 00:00",
         price=100.0,
         macd_12=1.0,
@@ -79,7 +79,7 @@ def test_save_result_appends_snapshot_rows_and_header_once(tmp_path: Path):
         rsi_6=55.0,
         bar_list=None,
     )
-    s2 = IndicatorSnapshot(
+    s2 = MarketSnapshot(
         date="2025-08-29 01:00",
         price=90.0,
         macd_12=-0.5,

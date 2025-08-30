@@ -9,7 +9,7 @@ class NoPositionState(PositionState):
     State representing the absence of any open position.
 
     This state evaluates entry conditions for LONG or SHORT positions
-    using the latest indicator snapshot and transitions to the
+    using the latest market snapshot and transitions to the
     appropriate open-position state when conditions are satisfied.
     """
 
@@ -32,7 +32,7 @@ class NoPositionState(PositionState):
         Returns:
             bool: True if LONG conditions are met; otherwise False.
         """
-        snapshot = self.parent.data_manager.indicator_snapshot
+        snapshot = self.parent.data_manager.market_snapshot
         return (
             not self.parent.data_manager.is_long_blocked
             and snapshot.macd_12 > snapshot.macd_26
@@ -48,7 +48,7 @@ class NoPositionState(PositionState):
         Returns:
             bool: True if SHORT conditions are met; otherwise False.
         """
-        snapshot = self.parent.data_manager.indicator_snapshot
+        snapshot = self.parent.data_manager.market_snapshot
         return (
             not self.parent.data_manager.is_short_blocked
             and snapshot.macd_12 < snapshot.macd_26
@@ -59,13 +59,13 @@ class NoPositionState(PositionState):
 
     def _update_position_snapshot(self) -> None:
         """
-        Persist the current indicator snapshot as the position snapshot.
+        Persist the current market snapshot as the position snapshot.
 
         This is used to record the market context at the moment the position
         is opened (price and technical indicators).
         """
         self.parent.data_manager.position_snapshot = (
-            self.parent.data_manager.indicator_snapshot.clone()
+            self.parent.data_manager.market_snapshot.clone()
         )
 
     def _apply_long(self) -> None:

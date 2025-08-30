@@ -37,7 +37,7 @@ class DummySnapshot:
 
 class DummyDataManager:
     def __init__(self, snapshot: DummySnapshot) -> None:
-        self.indicator_snapshot = snapshot
+        self.market_snapshot = snapshot
         self.position_snapshot = None
         self.is_long_blocked = False
         self.is_short_blocked = False

@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  setup_environment:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create virtual environment
+        run: python -m venv .venv
+
+      - name: Install dependencies
+        run: .\.venv\Scripts\pip install -r requirements.txt
+
+      - name: Pack venv
+        shell: pwsh
+        run: Compress-Archive -Path .venv -DestinationPath venv.zip -Force
+
+      - name: Upload venv artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: venv-artifact
+          path: venv.zip
+          if-no-files-found: error
+          retention-days: 1
+
+  generate_settings:
+    needs: setup_environment
+    uses: ./.github/workflows/generate-settings.yml
+    secrets:
+      PUBLIC_KEY: ${{ secrets.PUBLIC_KEY }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+
+  run_tests:
+    runs-on: self-hosted
+    needs: generate_settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download venv
+        uses: actions/download-artifact@v4
+        with:
+          name: venv-artifact
+          path: .
+
+      - name: Unpack venv
+        shell: pwsh
+        run: Expand-Archive -Path venv.zip -DestinationPath . -Force
+
+      - name: Download settings.toml
+        uses: actions/download-artifact@v4
+        with:
+          name: settings-artifact
+          path: .
+
+      - name: Run tests
+        run: .\.venv\Scripts\pytest -v

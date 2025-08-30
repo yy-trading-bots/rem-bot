@@ -6,7 +6,7 @@ def test_initial_state_has_expected_flags_and_no_snapshots():
     manager = DataManager()
     assert manager.is_long_blocked is False
     assert manager.is_short_blocked is False
-    assert not hasattr(manager, "indicator_snapshot")
+    assert not hasattr(manager, "market_snapshot")
     assert not hasattr(manager, "position_snapshot")
 
 

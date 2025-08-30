@@ -42,14 +42,14 @@ class RemBot:
         Perform the initial blocking logic based on the latest indicator snapshot.
 
         Actions:
-            - Fetches the first indicator snapshot from the BinanceAdapter.
+            - Fetches the first market snapshot from the BinanceAdapter.
             - Blocks LONG entries if the current price is below the EMA-100.
             - Otherwise, blocks SHORT entries.
         """
-        self.data_manager.indicator_snapshot = (
+        self.data_manager.market_snapshot = (
             self.binance_adapter.indicator_manager.fetch_indicators()
         )
-        temp_snapshot_alias = self.data_manager.indicator_snapshot
+        temp_snapshot_alias = self.data_manager.market_snapshot
         if SETTINGS.DEBUG_MODE:
             Logger.log_info("debug: " + str(temp_snapshot_alias))
         if temp_snapshot_alias.price < temp_snapshot_alias.ema_100:

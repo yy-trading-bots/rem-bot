@@ -5,7 +5,7 @@ import talib
 import pandas as pd
 from binance.client import Client
 from bot.bot_settings import SETTINGS
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 from utils.date_utils import DateUtils
 
 
@@ -166,19 +166,19 @@ class IndicatorManager:
         rsi = talib.RSI(close_prices, timeperiod=period)
         return float(rsi[-1])
 
-    def fetch_indicators(self) -> IndicatorSnapshot:
+    def fetch_indicators(self) -> MarketSnapshot:
         """
         Fetch and calculate all configured indicators for the trading symbol.
 
         Returns:
-            IndicatorSnapshot: Snapshot containing the latest price and indicators.
+            MarketSnapshot: Snapshot containing the latest price and indicators.
         """
         close_prices = self._get_close_prices()
         temp_macd_12, temp_macd_26 = self._calculate_MACD(
             macd_period=12, signal_period=26, close_prices=close_prices
         )
 
-        return IndicatorSnapshot(
+        return MarketSnapshot(
             date=DateUtils.get_date(),
             price=self._fetch_price(),
             macd_12=temp_macd_12,

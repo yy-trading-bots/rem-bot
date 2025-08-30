@@ -37,7 +37,7 @@ class PositionState(ABC):
             self._refresh_indicators()
             if SETTINGS.DEBUG_MODE:
                 Logger.log_info(
-                    "debug: " + str(self.parent.data_manager.indicator_snapshot)
+                    "debug: " + str(self.parent.data_manager.market_snapshot)
                 )
             self.apply()
         except Exception as e:
@@ -60,6 +60,6 @@ class PositionState(ABC):
         Updates the parent's DataManager with a fresh snapshot
         of indicators fetched from the BinanceAdapter.
         """
-        self.parent.data_manager.indicator_snapshot = (
+        self.parent.data_manager.market_snapshot = (
             self.parent.binance_adapter.indicator_manager.fetch_indicators()
         )

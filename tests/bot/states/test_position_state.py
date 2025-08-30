@@ -25,7 +25,7 @@ class DummyBinanceAdapter:
 
 class DummyDataManager:
     def __init__(self) -> None:
-        self.indicator_snapshot = None
+        self.market_snapshot = None
 
 
 class ConcreteState(PositionState):
@@ -63,7 +63,7 @@ def test_step_refreshes_indicators_then_calls_apply(monkeypatch):
 
     state.step()
 
-    assert parent.data_manager.indicator_snapshot is snapshot
+    assert parent.data_manager.market_snapshot is snapshot
     assert parent.binance_adapter.indicator_manager.calls == ["fetch"]
     assert state.calls == ["apply"]
     assert logged == []
@@ -81,7 +81,7 @@ def test_step_logs_when_apply_raises(monkeypatch):
 
     state.step()
 
-    assert parent.data_manager.indicator_snapshot is snapshot
+    assert parent.data_manager.market_snapshot is snapshot
     assert logged == ["boom"]
 
 
@@ -105,7 +105,7 @@ def test_step_logs_when_refresh_raises(monkeypatch):
 
     state.step()
 
-    assert parent.data_manager.indicator_snapshot is None
+    assert parent.data_manager.market_snapshot is None
     assert logged == ["net down"]
 
 
@@ -114,6 +114,6 @@ def test_refresh_indicators_sets_parent_snapshot():
     parent = make_parent(snapshot)
     state = ConcreteState(parent)
 
-    assert parent.data_manager.indicator_snapshot is None
+    assert parent.data_manager.market_snapshot is None
     state._refresh_indicators()
-    assert parent.data_manager.indicator_snapshot is snapshot
+    assert parent.data_manager.market_snapshot is snapshot

@@ -22,16 +22,16 @@ class BotSettings:
 SETTINGS_PATH = BASE_DIR / "settings.toml"
 _settings = FileUtils.read_toml_file(SETTINGS_PATH)
 SETTINGS = BotSettings(
-    _settings["api"]["public_key"],
-    _settings["api"]["secret_key"],
-    _settings["position"]["symbol"],
-    _settings["position"]["coin_precision"],
-    _settings["position"]["tp_ratio"],
-    _settings["position"]["sl_ratio"],
-    _settings["position"]["leverage"],
-    _settings["runtime"]["test_mode"],
-    _settings["runtime"]["debug_mode"],
-    _settings["runtime"]["interval"],
-    _settings["runtime"]["sleep_duration"],
-    _settings["output"]["csv_path"],
+    _settings["API"]["PUBLIC_KEY"],
+    _settings["API"]["SECRET_KEY"],
+    _settings["POSITION"]["SYMBOL"],
+    _settings["POSITION"]["COIN_PRECISION"],
+    _settings["POSITION"]["TP_RATIO"],
+    _settings["POSITION"]["SL_RATIO"],
+    _settings["POSITION"]["LEVERAGE"],
+    _settings["RUNTIME"]["TEST_MODE"],
+    _settings["RUNTIME"]["DEBUG_MODE"],
+    _settings["RUNTIME"]["INTERVAL"],
+    _settings["RUNTIME"]["SLEEP_DURATION"],
+    _settings["OUTPUT"]["CSV_PATH"],
 )

@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from typing import Union, Iterable, Any, Dict
-from data.indicator_snapshot import IndicatorSnapshot
+from data.market_snapshot import MarketSnapshot
 import tomli
 
 
@@ -71,7 +71,7 @@ class FileUtils:
         file_path: Union[str, Path],
         result: str,
         position: str,
-        snapshot: IndicatorSnapshot,
+        snapshot: MarketSnapshot,
     ) -> None:
         """
         Save a trading result into a CSV file.
@@ -80,7 +80,7 @@ class FileUtils:
             file_path (Union[str, Path]): Path to the results CSV file.
             result (str): Outcome of the trade ("WIN"/"LOSS" or similar).
             position (str): Position side ("LONG"/"SHORT").
-            snapshot (IndicatorSnapshot): Market snapshot at the time of entry/exit.
+            snapshot (MarketSnapshot): Market snapshot at the time of entry/exit.
         """
         row = [
             snapshot.date,
