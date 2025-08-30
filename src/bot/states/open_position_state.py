@@ -28,7 +28,6 @@ class OpenPositionState(PositionState):
                 the take-profit price and index 1 is the stop-loss price.
         """
         super().__init__(parent)
-        self.parent: Any = parent
         self.tp_price: float = float(target_prices[0])
         self.sl_price: float = float(target_prices[1])
 
