@@ -8,17 +8,21 @@ on:
       SECRET_KEY:
         required: true
 
+defaults:
+  run:
+    shell: powershell
+
 jobs:
   generate_settings:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows]
     steps:
       - uses: actions/checkout@v4
 
       - name: Write ./src/settings.toml
-        shell: pwsh
+        shell: powershell
         run: |
           New-Item -ItemType Directory -Path .\src -Force | Out-Null
-          $content = @"
+          $content = @'
           [API]
           PUBLIC_KEY = "${{ secrets.PUBLIC_KEY }}"
           SECRET_KEY = "${{ secrets.SECRET_KEY }}"
@@ -38,7 +42,7 @@ jobs:
 
           [OUTPUT]
           CSV_PATH = "./results.csv"
-          "@
+          '@
           Set-Content -Path .\src\settings.toml -Value $content -Encoding UTF8
 
       - name: Upload settings artifact

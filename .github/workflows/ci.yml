@@ -4,9 +4,13 @@ on:
   pull_request:
     branches: ["master"]
 
+defaults:
+  run:
+    shell: powershell
+
 jobs:
   setup_environment:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows]
     steps:
       - uses: actions/checkout@v4
 
@@ -17,7 +21,6 @@ jobs:
         run: .\.venv\Scripts\pip install -r requirements.txt
 
       - name: Pack venv
-        shell: pwsh
         run: Compress-Archive -Path .venv -DestinationPath venv.zip -Force
 
       - name: Upload venv artifact
@@ -36,7 +39,7 @@ jobs:
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
   run_tests:
-    runs-on: self-hosted
+    runs-on: [self-hosted, Windows]
     needs: generate_settings
     steps:
       - uses: actions/checkout@v4
@@ -48,7 +51,6 @@ jobs:
           path: .
 
       - name: Unpack venv
-        shell: pwsh
         run: Expand-Archive -Path venv.zip -DestinationPath . -Force
 
       - name: Download settings.toml
