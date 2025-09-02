@@ -1,153 +1,133 @@
 <div align="center">
-    <h1> RemBot </h1>
-    <img src="./assets/project-cover.jpeg" alt="Project Cover" width="500">
+  <img src="assets/rembot.png" alt="RemBot Project Cover">
 </div>
 
-## Table of Contents
+[![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
+[![Coverage 96.78%](https://img.shields.io/badge/coverage-96.78%25-brightgreen.svg)](https://github.com/yy-trading-bots/rem-bot/blob/master/htmlcov/index.html)
+[![CI](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml)
+[![license](https://img.shields.io/github/license/yy-trading-bots/rem-bot)](https://github.com/yy-trading-bots/rem-bot/blob/master/LICENSE)
 
-- [Description](#description)
+# RemBot
 
-- [How does it work?](#how-does-it-work)
+> An automated crypto trading bot for **Binance** that combines **R**SI, **E**MA, and **M**ACD — the **REM** trio — to generate confluence-based LONG/SHORT signals.
 
-- [Technologies Used](#technologies-used)
+---
 
-- [Installation](#installation)
+## 📖 Description
 
-- [Configuration](#configuration)
+RemBot is a Python trading bot that connects to the Binance API and opens LONG or SHORT positions when REM (RSI, EMA, MACD) conditions are met. It uses clear abstractions with object‑oriented design and pragmatic design patterns to keep the codebase clean and maintainable without sacrificing functionality. The project also serves as a concise reference implementation for developers building their own trading bots.
 
-- [Running the bot](#running-the-bot)
+---
 
-- [Warnings](#warnings)
+## 🎯 Strategy
 
-## Description
+> **REM = RSI + EMA + MACD**
 
-RemBot is an experimental cryptocurrency trading bot. This bot monitors specific conditions and, if met, strategically enters the appropriate position ("LONG" or "SHORT"). With its simple algorithm, RemBot ensures precise decision-making in the dynamic world of crypto trading, offering users a reliable tool to navigate the markets effectively. Stay ahead of the curve and let RemBot empower your crypto trading journey.
+A typical configuration uses:
 
-<div align="center">
-    <img src="./assets/description.jpg" alt="Project Cover" width="350">
-</div>
+- **Trend filter (EMA)** – e.g., price relative to `EMA_100` to determine bullish/bearish bias.
+- **Momentum (MACD)** – e.g., MACD line vs. signal line and the zero line.
+- **Momentum (RSI)** – e.g., a short-period RSI threshold around 50 to confirm momentum direction.
 
-## How does it work?
+**Illustrative decision flow (pseudocode):**
 
-REM stands for RSI-EMA-MACD
+```py
+while True:
+    if price > EMA_100 and MACD_line crosses_above signal and RSI > 50:
+        enter_long()
+    elif price < EMA_100 and MACD_line crosses_below signal and RSI < 50:
+        enter_short()
 
-When certain conditions are met, Bot enters position automatically.
-
-```bash
-    while True:
-        if (MACD_12 > MACD_26) and (MACD_12 < 0) and (EMA_100 > price) and (RSI_6 > 50):
-            # Enter LONG...
-
-        elif (MACD_12 < MACD_26) and (MACD_12 > 0) and (EMA_100 < price) and (RSI_6 < 50):
-            # Enter SHORT...
+    manage_position(tp_ratio=TP_RATIO, sl_ratio=SL_RATIO, leverage=LEVERAGE)
 ```
 
-You can check out this video for MACD Strategies.
+> You can tune lookback windows, thresholds, and scheduling via configuration.
+
+---
+
+For a video explanation of the strategy, you may see the video below. (The video does not belong to this repository or organisation)
 
 <div align="center">
-    <a href="https://www.youtube.com/watch?v=Gs-_tleyz3Q&ab_channel=TRADEEMPIRE"><img src="./assets/strategy.jpg" alt="Project Cover" width="700"> </a>
+  <a href="https://www.youtube.com/watch?v=Gs-_tleyz3Q&ab_channel=TRADEEMPIRE"><img src="assets/strategy.jpg" alt="Strategy Reference" width="600"> </a>
 </div>
 
-## Technologies Used
+## ⚙️ Configuration
 
-1. **Python:** The primary programming language driving RemBot's functionality and logic.
+First, rename `settings.example.toml` to **`settings.toml`** and edit the fields to match your preferences.
 
-2. **Binance API:** RemBot connects seamlessly to the Binance cryptocurrency exchange through its API, allowing real-time access to market data and execution of trades.
+| Key              | Section      |    Type |           Default | Description                                                                                   | Example               |
+| ---------------- | ------------ | ------: | ----------------: | --------------------------------------------------------------------------------------------- | --------------------- |
+| `PUBLIC_KEY`     | `[API]`      |  string |              `""` | Your Binance API key. Grant only the permissions you actually need. **Do not commit to VCS.** | `"AKIA..."`           |
+| `SECRET_KEY`     | `[API]`      |  string |              `""` | Your Binance API secret. Keep it secret and out of the repo.                                  | `"wJalrXUtnFEMI..."`  |
+| `SYMBOL`         | `[POSITION]` |  string |       `"ETHUSDT"` | Trading symbol (e.g., USDT-M futures or spot pair).                                           | `"BTCUSDT"`           |
+| `COIN_PRECISION` | `[POSITION]` | integer |               `2` | Quantity precision for orders. Must align with the exchange **lot size** rules.               | `3`                   |
+| `TP_RATIO`       | `[POSITION]` |   float |          `0.0050` | Take-profit distance **relative to entry**. `0.0050` = **0.5%**.                              | `0.0100`              |
+| `SL_RATIO`       | `[POSITION]` |   float |          `0.0050` | Stop-loss distance **relative to entry**. `0.0050` = **0.5%**.                                | `0.0075`              |
+| `LEVERAGE`       | `[POSITION]` | integer |               `1` | Leverage to apply (for futures). Use responsibly.                                             | `5`                   |
+| `TEST_MODE`      | `[RUNTIME]`  |    bool |            `true` | Paper/Test mode. When `true`, no live orders are sent (or a testnet is used).                 | `false`               |
+| `DEBUG_MODE`     | `[RUNTIME]`  |    bool |           `false` | Verbose logging and extra assertions.                                                         | `true`                |
+| `INTERVAL`       | `[RUNTIME]`  |  string |           `"15m"` | Indicator/candle interval (e.g., `1m`, `5m`, `15m`, `1h`, ...).                               | `"1h"`                |
+| `SLEEP_DURATION` | `[RUNTIME]`  |   float |            `30.0` | Delay (seconds) between loops to respect API limits.                                          | `10.0`                |
+| `CSV_PATH`       | `[OUTPUT]`   |  string | `"./results.csv"` | Path where trade/position logs are written.                                                   | `"./logs/trades.csv"` |
 
-3. **TA-Lib Library:** Technical Analysis Library provides essential functions for technical analysis of financial markets, aiding RemBot in evaluating market indicators.
+**Where to get API keys:** Binance → **API Management**: [https://www.binance.com/en/my/settings/api-management](https://www.binance.com/en/my/settings/api-management)
 
-4. **ChatGPT:** ChatGPT, powered by OpenAI, is employed for code assistance, aiding developers in coding tasks and providing guidance on library usage. Additionally, ChatGPT is used for crafting informative log messages, enhancing communication and facilitating a smoother understanding of RemBot's operations.
+> Tips
+>
+> - Keep `COIN_PRECISION` in sync with `exchangeInfo` (lot/tick size) to avoid rejected orders.
 
-<div align="center">
-    <p> 
-        <a href="https://www.python.org/"> <img src="./assets/python-logo.png" width="75" alt="python"> </a>
-        <a href="https://github.com/sammchardy/python-binance"> <img src="./assets/binance-logo.png" width="75" alt="binanceAPI"> </a>
-        <a href="https://pypi.org/project/TA-Lib/"> <img src="./assets/talib-logo.png" width="75" alt="TA-lib"> </a>
-        <a href="https://chat.openai.com/chat" target="_blank"> <img src="./assets/chatgpt-logo.png" width="75" alt="python"> </a>
-    </p>
-</div>
+---
 
-## Installation
+## ▶️ How to Run
 
-To install Project, follow these simple steps:
+> Ensure `settings.toml` is properly configured **before** running.
 
-1.  **Install Python:**
-    - Visit [Python official website](https://www.python.org/downloads/) and download python.
-    - I strongly recommend downloading a version lower than 3.10 and higher than 3 to ensure that you can download it without any issues and run the Talib library smoothly.
-2.  **Cloning the Project into your local:**
-    Go to the directory where you want to download the project using 'cd', and then type the following command
-    ```bash
-    $git clone https://github.com/basaryldrm06/RemBot
-    ```
-3.  **Install Dependencies**
-    Enter these commands in sequence.
-    ```bash
-    $cd RemBot
-    $pip install -r requirements.txt
-    ```
+### 1) Release (will be updated)
 
-Upon successfully completing these steps, proceed to configure your settings and run the program.
+Download the latest release and run the executable.
 
-In case you encounter any issues, kindly attempt to resolve them before moving forward.
-
-If you are facing difficulties downloading the Talib library, consider trying a manual download from this [link](https://www.lfd.uci.edu/~gohlke/pythonlibs/).
-
-## Configuration
-
-Rename the file config2.py to config.py.
-
-Open the config.py file to edit the settings, and fill in the empty fields according to your preferences.
-
-<div align="center">
-    <img src="./assets/config.png" alt="Config File">
-</div>
-
-If you do not have an api key you can obtain one from this [link](https://www.binance.com/en/my/settings/api-management)
-
-You can use the default values for other sections or customize them based on your preferences.
-
-Once you have finished editing your settings, you will be ready to run the program.
-
-## Running the Bot
-
-If you have completed the previous steps, RemBot is now ready to run. Start it by entering the following command:
+### 2) Docker
 
 ```bash
-$python main.py
+# Build the image
+docker build -t rembot .
+
+# Run (Linux/macOS)
+docker run --rm \
+  -v "$(pwd)/src:/app/src" \
+  rembot
+
+# Run (Windows CMD)
+docker run --rm \
+  -v "%cd%\src:/app/src"
+  rembot
 ```
 
-After running the command, you should see a screen similar to the one below.
+> The volumes mount your local `src/` for output log files.
 
-<div align="center">
-    <img src="./assets/running.png" alt="Running Bot">
-</div>
+### 3) Python (virtualenv)
 
-## Warnings
+```bash
+# Create a virtual environment
+python -m venv .venv
 
-This trading bot has been developed solely for experimental purposes, aiming to explore the viability and effectiveness of automating algorithmic decision-making in financial transactions. It is a completely experimental project shared as open-source to serve as an example for the development of trading bots.
+# Activate
+# Linux/macOS
+source ./.venv/bin/activate
+# Windows CMD
+.\.venv\Scripts\activate
 
-Any profits or losses incurred using this bot are entirely your responsibility. Please refrain from using the program if you are not familiar with its functionalities. Understand that engaging in financial transactions carries inherent risks, and it's crucial to exercise caution and knowledge when utilizing this bot.
+# Install dependencies
+pip install -r requirements.txt
 
-<div align="center">
-    <img src="./assets/high-risk.jpg" alt="Code Example" width="300">
-</div>
+# Run
+python src/main.py   # direct module/script
+```
 
-## Last Words from Developer
+---
 
-I hope you find this project useful and enjoyable.
+## ⚠️ Warnings
 
-Feel free to follow my account for more projects like this and stay updated on upcoming releases. Don't forget to star and watch this project to receive notifications about future updates and improvements.
-
-Algorithmic Trading Bots represent a significant advancement in our era, providing a diverse array of applications within the financial landscape. While engaging in this project, my goal was to explore the capabilities of Algorithmic Trading Bots and their effectiveness in financial transactions. For this reason, this project was particularly intriguing and enjoyable for me.
-
-If you have any innovative ideas in mind for trading bots or AI, feel free to reach out to me through the links on my profile. We can collaborate and develop something together.
-
-Thank you for your interest and support! 🚀
-
-<div align="center">
-    <p> 
-        <a href="mailto:basaryldrm06@gmail.com?subject=Hello%20basaryldrm06"> <img src="./assets/gmail.png" width="60" alt="gmail"> </a>
-        <a href="https://www.linkedin.com/in/basaryldrm06/"> <img src="./assets/linkedin.png" width="60" alt="linkedin"> </a>
-        <a href="https://github.com/basaryldrm06" target="_blank"> <img src="./assets/github.png" width="60" alt="github"> </a>
-    </p>
-</div>
+> **Disclaimer:** Trading cryptocurrencies — especially with **leverage** — involves **significant risk**. This bot is **not financial advice** and is provided for educational/experimental purposes only. Review the code and the strategy thoroughly, start small, and only trade with funds you can afford to lose. **All P\&L is your responsibility.**
+>
+> Protect your API keys, never commit secrets, and be aware of operational risks such as rate limits, network issues, exchange maintenance, and **slippage**, all of which can materially affect performance.
