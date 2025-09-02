@@ -2,7 +2,7 @@ import csv
 from pathlib import Path
 from typing import Union, Iterable, Any, Dict
 from data.market_snapshot import MarketSnapshot
-import tomli
+import tomllib
 
 
 class FileUtils:
@@ -115,7 +115,7 @@ class FileUtils:
 
         with p.open("rb") as f:
             try:
-                data = tomli.load(f)
+                data = tomllib.load(f)
             except Exception as exc:
                 raise ValueError(f"Failed to parse TOML file: {p}") from exc
 

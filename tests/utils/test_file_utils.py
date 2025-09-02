@@ -159,7 +159,7 @@ def test_read_toml_file_non_dict_top_level_raises_valueerror(
     def fake_load(_fp):
         return ["not-a-dict"]
 
-    monkeypatch.setattr(file_utils_module.tomli, "load", lambda fp: fake_load(fp))
+    monkeypatch.setattr(file_utils_module.tomllib, "load", lambda fp: fake_load(fp))
 
     with pytest.raises(ValueError) as ei:
         FileUtils.read_toml_file(toml_file)
