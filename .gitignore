@@ -4,6 +4,4 @@ __pycache__
 .vscode/
 settings.toml
 .coverage
-htmlcov/
 .pytest_cache
-results.csv
