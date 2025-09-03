@@ -2,20 +2,16 @@ from cx_Freeze import setup, Executable
 import sys
 import shutil
 import os
+import pathlib
+import dateparser
 
 sys.path.insert(0, os.path.abspath("src"))
 
 base = None
-
 executables = [Executable("src/main.py", base=base, target_name="rembot.exe")]
 
-
-def prepare_data_files(build_dir):
-    src_example = os.path.join("src", "settings.example.toml")
-    target = os.path.join(build_dir, "settings.toml")
-    if os.path.exists(src_example):
-        shutil.copy2(src_example, target)
-
+dateparser_pkg_dir = pathlib.Path(dateparser.__file__).parent
+dateparser_data_dir = dateparser_pkg_dir / "data"
 
 build_exe_options = {
     "packages": [
@@ -23,6 +19,9 @@ build_exe_options = {
         "talib",
         "requests",
         "urllib3",
+        "dateparser",
+        "dateparser.data",
+        "dateparser.data.date_translation_data",
     ],
     "includes": [
         "websockets.legacy",
@@ -32,11 +31,17 @@ build_exe_options = {
         "certifi",
         "requests",
         "urllib3",
+        "dateparser.languages.loader",
+        "dateparser.conf",
+        "dateparser.date",
     ],
     "excludes": [],
     "zip_include_packages": ["*"],
-    "zip_exclude_packages": ["dateparser", "websockets", "talib"],
-    "include_files": [("src/settings.example.toml", "settings.toml")],
+    "zip_exclude_packages": ["websockets", "talib", "dateparser"],
+    "include_files": [
+        ("src/settings.example.toml", "settings.toml"),
+    ],
+    "include_msvcr": True,
 }
 
 build_dir = "build"
@@ -51,13 +56,3 @@ setup(
     executables=executables,
     script_args=["build"],
 )
-
-if __name__ == "__main__":
-    build_root = None
-    if os.path.isdir("build"):
-        for entry in os.listdir("build"):
-            if entry.startswith("exe"):
-                build_root = os.path.join("build", entry)
-                break
-    if build_root:
-        prepare_data_files(build_root)
