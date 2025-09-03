@@ -4,7 +4,7 @@
 
 [![Python 3.13](https://img.shields.io/badge/python-3.13-blue.svg)](https://www.python.org/downloads/)
 [![Coverage 96.79%](https://img.shields.io/badge/coverage-96.79%25-brightgreen.svg)](#)
-[![CI](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml)
+[![CI](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml/badge.svg)](https://github.com/yy-trading-bots/rem-bot/actions/workflows/ci.yml)
 [![license](https://img.shields.io/github/license/yy-trading-bots/rem-bot)](https://github.com/yy-trading-bots/rem-bot/blob/master/LICENSE)
 
 # RemBot
@@ -82,7 +82,9 @@ First, rename `settings.example.toml` to **`settings.toml`** and edit the fields
 
 > Ensure `settings.toml` is properly configured **before** running.
 
-### 1) Release (will be updated)
+There are three ways to run the bot, and you may choose whichever best suits your needs.
+
+### 1) Release
 
 Download the latest release and run the executable.
 
