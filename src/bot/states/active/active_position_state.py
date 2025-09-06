@@ -10,9 +10,9 @@ from data.market_snapshot import MarketSnapshot
 from bot.performance_tracker import PerformanceTracker
 
 
-class OpenPositionState(PositionState):
+class ActivePositionState(PositionState):
     """
-    Base class for states that manage an open trading position.
+    Base class for states that manage an active trading position.
 
     Subclasses (e.g., LongPositionState, ShortPositionState) must implement
     the price-condition checks for take-profit and stop-loss.
@@ -39,17 +39,17 @@ class OpenPositionState(PositionState):
         ],
     ) -> None:
         """
-        Close the current position and transition back to NoPositionState.
+        Close the current position and transition back to FlatPositionState.
 
         Args:
-            position (Literal["LONG", "SHORT"]): The side of the open position.
+            position (Literal["LONG", "SHORT"]): The side of the active position.
             result_function (Callable): Callback to handle result persistence
                 and performance tracking (e.g., TP/SL handlers).
 
         Actions performed:
             - Invokes the given result handler (TP or SL).
             - Logs the updated win/loss statistics.
-            - Transitions the bot state to NoPositionState.
+            - Transitions the bot state to FlatPositionState.
         """
         snapshot: MarketSnapshot = self.parent.data_manager.position_snapshot
         pf_tracker: PerformanceTracker = self.parent.performance_tracker
@@ -65,9 +65,9 @@ class OpenPositionState(PositionState):
             + pf_tracker.calculate_win_rate()
         )
 
-        from bot.states.no_position_state import NoPositionState
+        from bot.states.flat.flat_position_state import FlatPositionState
 
-        self.parent.state = NoPositionState(parent=self.parent)
+        self.parent.state = FlatPositionState(parent=self.parent)
 
     def _handle_tp(
         self,

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from bot.performance_tracker import PerformanceTracker
 from bot.data_manager import DataManager
-from bot.states.no_position_state import NoPositionState
+from bot.states.flat.flat_position_state import FlatPositionState
 from bot.states.position_state import PositionState
 from bot.bot_settings import SETTINGS
 from binance_adapter.binance_adapter import BinanceAdapter
@@ -16,7 +16,7 @@ class RemBot:
     and interaction with the Binance API.
 
     The bot uses a state machine pattern where each trading
-    position state (e.g., NoPosition, Long, Short) is represented
+    position state (e.g., Flat, Long, Short) is represented
     by a dedicated class.
     """
 
@@ -35,7 +35,7 @@ class RemBot:
         self.binance_adapter: BinanceAdapter = BinanceAdapter()
         Logger.log_start("RemBot is running...")
         self.initial_block()
-        self.state: PositionState = NoPositionState(parent=self)
+        self.state: PositionState = FlatPositionState(parent=self)
 
     def initial_block(self) -> None:
         """

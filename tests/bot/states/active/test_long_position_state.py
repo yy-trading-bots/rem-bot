@@ -1,4 +1,4 @@
-from bot.states.long_position_state import LongPositionState
+from bot.states.active.long_position_state import LongPositionState
 
 
 class Snapshot:
