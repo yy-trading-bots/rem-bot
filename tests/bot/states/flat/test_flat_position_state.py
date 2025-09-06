@@ -1,7 +1,7 @@
 import types
 import builtins
-from bot.states.no_position_state import NoPositionState
-import bot.states.no_position_state as no_pos_module
+from bot.states.flat.flat_position_state import FlatPositionState
+import bot.states.flat.flat_position_state as flat_pos_module
 
 
 class DummySnapshot:
@@ -82,7 +82,7 @@ def test_is_long_entry_condition_met_true_and_false():
         price=90, ema_100=100, macd_12=-0.5, macd_26=-1.0, rsi_6=60
     )
     parent = DummyParent(snapshot)
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
     assert state._is_long_entry_condition_met() is True
 
     parent.data_manager.is_long_blocked = True
@@ -92,7 +92,7 @@ def test_is_long_entry_condition_met_true_and_false():
 def test_is_short_entry_condition_met_true_and_false():
     snapshot = DummySnapshot(price=110, ema_100=100, macd_12=1.0, macd_26=2.0, rsi_6=40)
     parent = DummyParent(snapshot)
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
     assert state._is_short_entry_condition_met() is True
 
     parent.data_manager.is_short_blocked = True
@@ -102,7 +102,7 @@ def test_is_short_entry_condition_met_true_and_false():
 def test_update_position_snapshot_clones():
     snapshot = DummySnapshot()
     parent = DummyParent(snapshot)
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
     state._update_position_snapshot()
     assert parent.data_manager.position_snapshot is not snapshot
     assert isinstance(parent.data_manager.position_snapshot, DummySnapshot)
@@ -114,15 +114,17 @@ def test_apply_long_transitions_and_logs(monkeypatch):
         price=100, ema_100=200, macd_12=-0.5, macd_26=-1.0, rsi_6=60
     )
     parent = DummyParent(snapshot, adapter=DummyBinanceAdapter(long_tp=150, long_sl=80))
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
 
     logs: list[str] = []
-    monkeypatch.setattr(no_pos_module.Logger, "log_info", lambda msg: logs.append(msg))
+    monkeypatch.setattr(
+        flat_pos_module.Logger, "log_info", lambda msg: logs.append(msg)
+    )
 
     original_import = builtins.__import__
 
     def import_stub(name, globals=None, locals=None, fromlist=(), level=0):
-        if name == "bot.states.long_position_state":
+        if name == "bot.states.active.long_position_state":
             mod = types.ModuleType(name)
 
             class FakeLongState:
@@ -151,15 +153,17 @@ def test_apply_short_transitions_and_logs(monkeypatch):
     parent = DummyParent(
         snapshot, adapter=DummyBinanceAdapter(short_tp=180, short_sl=220)
     )
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
 
     logs: list[str] = []
-    monkeypatch.setattr(no_pos_module.Logger, "log_info", lambda msg: logs.append(msg))
+    monkeypatch.setattr(
+        flat_pos_module.Logger, "log_info", lambda msg: logs.append(msg)
+    )
 
     original_import = builtins.__import__
 
     def import_stub(name, globals=None, locals=None, fromlist=(), level=0):
-        if name == "bot.states.short_position_state":
+        if name == "bot.states.active.short_position_state":
             mod = types.ModuleType(name)
 
             class FakeShortState:
@@ -186,7 +190,7 @@ def test_apply_short_transitions_and_logs(monkeypatch):
 def test_apply_branches(monkeypatch):
     snapshot = DummySnapshot()
     parent = DummyParent(snapshot)
-    state = NoPositionState(parent)
+    state = FlatPositionState(parent)
 
     called = {"long": False, "short": False}
 

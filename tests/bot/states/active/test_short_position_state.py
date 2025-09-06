@@ -1,4 +1,4 @@
-from bot.states.short_position_state import ShortPositionState
+from bot.states.active.short_position_state import ShortPositionState
 
 
 class Snapshot:

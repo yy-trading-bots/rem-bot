@@ -1,10 +1,10 @@
 from __future__ import annotations
-from bot.states.open_position_state import OpenPositionState
+from bot.states.active.active_position_state import ActivePositionState
 
 
-class ShortPositionState(OpenPositionState):
+class ShortPositionState(ActivePositionState):
     """
-    Represents an open SHORT trading position.
+    Represents an active SHORT trading position.
 
     This state continuously monitors whether the take-profit (TP)
     or stop-loss (SL) conditions are met. If one of these conditions

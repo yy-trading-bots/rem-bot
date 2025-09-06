@@ -1,7 +1,7 @@
 import pytest
 from typing import Any, Literal, cast
-from bot.states.open_position_state import OpenPositionState
-import bot.states.open_position_state as open_pos_module
+from bot.states.active.active_position_state import ActivePositionState
+import bot.states.active.active_position_state as open_pos_module
 from bot.performance_tracker import PerformanceTracker
 
 PositionSide = Literal["LONG", "SHORT"]
@@ -25,7 +25,7 @@ class Parent:
         self.state = None
 
 
-class ConcreteOpen(OpenPositionState):
+class ConcreteOpen(ActivePositionState):
     def apply(self) -> None:
         return None
 
@@ -160,7 +160,7 @@ def test_close_position_calls_handler_logs_and_transitions(monkeypatch):
     assert calls["tracker"] is parent.performance_tracker
 
     assert parent.state is not None
-    assert parent.state.__class__.__name__ == "NoPositionState"
+    assert parent.state.__class__.__name__ == "FlatPositionState"
 
     assert (
         info_logs

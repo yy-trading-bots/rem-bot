@@ -10,7 +10,7 @@ class PositionState(ABC):
     Abstract base class representing a trading position state.
 
     This class defines the interface and core workflow for handling position states.
-    Each concrete state (e.g., Long, Short, NoPosition) must implement the `apply` method
+    Each concrete state (e.g., Long, Short, Flat) must implement the `apply` method
     to define specific trading logic.
     """
 

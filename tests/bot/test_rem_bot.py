@@ -39,7 +39,7 @@ def test_init_blocks_long_when_price_below_ema(monkeypatch):
         start_logs.append(message)
 
     monkeypatch.setattr(rem_bot_module.Logger, "log_start", fake_log_start)
-    monkeypatch.setattr(rem_bot_module, "NoPositionState", FakeState)
+    monkeypatch.setattr(rem_bot_module, "FlatPositionState", FakeState)
 
     snapshot = Snapshot(price=100.0, ema_100=150.0)
 
@@ -58,7 +58,7 @@ def test_init_blocks_long_when_price_below_ema(monkeypatch):
 
 
 def test_init_blocks_short_when_price_at_or_above_ema(monkeypatch):
-    monkeypatch.setattr(rem_bot_module, "NoPositionState", FakeState)
+    monkeypatch.setattr(rem_bot_module, "FlatPositionState", FakeState)
 
     snapshot = Snapshot(price=200.0, ema_100=150.0)
 
@@ -87,7 +87,7 @@ def test_run_exits_when_sleep_raises_and_sleep_called_once(monkeypatch):
         raise StopLoop
 
     monkeypatch.setattr(rem_bot_module, "sleep", fake_sleep)
-    monkeypatch.setattr(rem_bot_module, "NoPositionState", FakeState)
+    monkeypatch.setattr(rem_bot_module, "FlatPositionState", FakeState)
 
     snapshot = Snapshot(price=100.0, ema_100=50.0)
 

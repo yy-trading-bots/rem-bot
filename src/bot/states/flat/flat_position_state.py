@@ -4,13 +4,13 @@ from bot.states.position_state import PositionState
 from utils.logger import Logger
 
 
-class NoPositionState(PositionState):
+class FlatPositionState(PositionState):
     """
-    State representing the absence of any open position.
+    State representing the absence of any active position.
 
     This state evaluates entry conditions for LONG or SHORT positions
     using the latest market snapshot and transitions to the
-    appropriate open-position state when conditions are satisfied.
+    appropriate active-position state when conditions are satisfied.
     """
 
     def apply(self) -> None:
@@ -70,7 +70,7 @@ class NoPositionState(PositionState):
 
     def _apply_long(self) -> None:
         """
-        Open a LONG position and transition to the LongPositionState.
+        Enter a LONG position and transition to the LongPositionState.
 
         Actions performed:
             - Blocks further LONG entries until the position is closed.
@@ -92,7 +92,7 @@ class NoPositionState(PositionState):
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
         self.parent.data_manager.block_long()
-        from bot.states.long_position_state import LongPositionState
+        from bot.states.active.long_position_state import LongPositionState
 
         self.parent.state = LongPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
@@ -100,7 +100,7 @@ class NoPositionState(PositionState):
 
     def _apply_short(self) -> None:
         """
-        Open a SHORT position and transition to the ShortPositionState.
+        Enter a SHORT position and transition to the ShortPositionState.
 
         Actions performed:
             - Blocks further SHORT entries until the position is closed.
@@ -123,7 +123,7 @@ class NoPositionState(PositionState):
         )
         Logger.log_info(str(self.parent.data_manager.position_snapshot))
         self.parent.data_manager.block_short()
-        from bot.states.short_position_state import ShortPositionState
+        from bot.states.active.short_position_state import ShortPositionState
 
         self.parent.state = ShortPositionState(
             parent=self.parent, target_prices=[tp_price, sl_price]
