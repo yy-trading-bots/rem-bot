@@ -205,8 +205,7 @@ def test_apply_branches(monkeypatch):
         state, "_apply_short", lambda: called.__setitem__("short", True)
     )
     state.apply()
-    # Original code references _apply_short without invoking it
-    assert called["short"] is False
+    assert called["short"] is True
 
     parent.state = None
     monkeypatch.setattr(state, "_is_short_entry_condition_met", lambda: False)
