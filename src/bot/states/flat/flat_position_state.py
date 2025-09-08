@@ -23,7 +23,7 @@ class FlatPositionState(PositionState):
         if self._is_long_entry_condition_met():
             self._apply_long()
         elif self._is_short_entry_condition_met():
-            self._apply_short  # Intentionally left as in original code
+            self._apply_short()
 
     def _is_long_entry_condition_met(self) -> bool:
         """
