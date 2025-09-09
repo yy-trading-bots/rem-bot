@@ -38,9 +38,6 @@ jobs:
           DEBUG_MODE = false
           INTERVAL = "15m"
           SLEEP_DURATION = 30.0
-
-          [OUTPUT]
-          CSV_PATH = "./results.csv"
           '@
 
           $path = Join-Path -Path (Get-Location) -ChildPath 'src\settings.toml'
