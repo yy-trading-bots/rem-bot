@@ -55,20 +55,19 @@ For a video explanation of the strategy, you may see the video below. (The video
 
 First, rename `settings.example.toml` to **`settings.toml`** and edit the fields to match your preferences.
 
-| Key              | Section      |    Type |           Default | Description                                                                                   | Example               |
-| ---------------- | ------------ | ------: | ----------------: | --------------------------------------------------------------------------------------------- | --------------------- |
-| `PUBLIC_KEY`     | `[API]`      |  string |              `""` | Your Binance API key. Grant only the permissions you actually need. **Do not commit to VCS.** | `"AKIA..."`           |
-| `SECRET_KEY`     | `[API]`      |  string |              `""` | Your Binance API secret. Keep it secret and out of the repo.                                  | `"wJalrXUtnFEMI..."`  |
-| `SYMBOL`         | `[POSITION]` |  string |       `"ETHUSDT"` | Trading symbol (e.g., USDT-M futures or spot pair).                                           | `"BTCUSDT"`           |
-| `COIN_PRECISION` | `[POSITION]` | integer |               `2` | Quantity precision for orders. Must align with the exchange **lot size** rules.               | `3`                   |
-| `TP_RATIO`       | `[POSITION]` |   float |          `0.0050` | Take-profit distance **relative to entry**. `0.0050` = **0.5%**.                              | `0.0100`              |
-| `SL_RATIO`       | `[POSITION]` |   float |          `0.0050` | Stop-loss distance **relative to entry**. `0.0050` = **0.5%**.                                | `0.0075`              |
-| `LEVERAGE`       | `[POSITION]` | integer |               `1` | Leverage to apply (for futures). Use responsibly.                                             | `5`                   |
-| `TEST_MODE`      | `[RUNTIME]`  |    bool |            `true` | Paper/Test mode. When `true`, no live orders are sent (or a testnet is used).                 | `false`               |
-| `DEBUG_MODE`     | `[RUNTIME]`  |    bool |           `false` | Verbose logging and extra assertions.                                                         | `true`                |
-| `INTERVAL`       | `[RUNTIME]`  |  string |           `"15m"` | Indicator/candle interval (e.g., `1m`, `5m`, `15m`, `1h`, ...).                               | `"1h"`                |
-| `SLEEP_DURATION` | `[RUNTIME]`  |   float |            `30.0` | Delay (seconds) between loops to respect API limits.                                          | `10.0`                |
-| `CSV_PATH`       | `[OUTPUT]`   |  string | `"./results.csv"` | Path where trade/position logs are written.                                                   | `"./logs/trades.csv"` |
+| Key              | Section      |    Type |     Default | Description                                                                                   | Example              |
+| ---------------- | ------------ | ------: | ----------: | --------------------------------------------------------------------------------------------- | -------------------- |
+| `PUBLIC_KEY`     | `[API]`      |  string |        `""` | Your Binance API key. Grant only the permissions you actually need. **Do not commit to VCS.** | `"AKIA..."`          |
+| `SECRET_KEY`     | `[API]`      |  string |        `""` | Your Binance API secret. Keep it secret and out of the repo.                                  | `"wJalrXUtnFEMI..."` |
+| `SYMBOL`         | `[POSITION]` |  string | `"ETHUSDT"` | Trading symbol (e.g., USDT-M futures or spot pair).                                           | `"BTCUSDT"`          |
+| `COIN_PRECISION` | `[POSITION]` | integer |         `2` | Quantity precision for orders. Must align with the exchange **lot size** rules.               | `3`                  |
+| `TP_RATIO`       | `[POSITION]` |   float |    `0.0050` | Take-profit distance **relative to entry**. `0.0050` = **0.5%**.                              | `0.0100`             |
+| `SL_RATIO`       | `[POSITION]` |   float |    `0.0050` | Stop-loss distance **relative to entry**. `0.0050` = **0.5%**.                                | `0.0075`             |
+| `LEVERAGE`       | `[POSITION]` | integer |         `1` | Leverage to apply (for futures). Use responsibly.                                             | `5`                  |
+| `TEST_MODE`      | `[RUNTIME]`  |    bool |      `true` | Paper/Test mode. When `true`, no live orders are sent (or a testnet is used).                 | `false`              |
+| `DEBUG_MODE`     | `[RUNTIME]`  |    bool |     `false` | Verbose logging and extra assertions.                                                         | `true`               |
+| `INTERVAL`       | `[RUNTIME]`  |  string |     `"15m"` | Indicator/candle interval (e.g., `1m`, `5m`, `15m`, `1h`, ...).                               | `"1h"`               |
+| `SLEEP_DURATION` | `[RUNTIME]`  |   float |      `30.0` | Delay (seconds) between loops to respect API limits.                                          | `10.0`               |
 
 **Where to get API keys:** Binance → **API Management**: [https://www.binance.com/en/my/settings/api-management](https://www.binance.com/en/my/settings/api-management)
 
