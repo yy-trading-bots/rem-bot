@@ -34,10 +34,10 @@ class RemBot:
         self.data_manager: DataManager = DataManager()
         self.binance_adapter: BinanceAdapter = BinanceAdapter()
         Logger.log_start("RemBot is running...")
-        self.initial_block()
+        self._initial_block()
         self.state: PositionState = FlatPositionState(parent=self)
 
-    def initial_block(self) -> None:
+    def _initial_block(self) -> None:
         """
         Perform the initial blocking logic based on the latest indicator snapshot.
 

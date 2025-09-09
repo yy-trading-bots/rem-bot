@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from utils.file_utils import FileUtils
 from base_dir import BASE_DIR
+from pathlib import Path
+from typing import Union
 
 
 @dataclass(frozen=True)
@@ -16,10 +18,11 @@ class BotSettings:
     DEBUG_MODE: bool
     INTERVAL: str
     SLEEP_DURATION: float
-    OUTPUT_CSV_PATH: str
+    OUTPUT_CSV_PATH: Union[str, Path]
 
 
 SETTINGS_PATH = BASE_DIR / "settings.toml"
+OUTPUT_CSV_PATH = BASE_DIR / "results.csv"
 _settings = FileUtils.read_toml_file(SETTINGS_PATH)
 SETTINGS = BotSettings(
     _settings["API"]["PUBLIC_KEY"],
@@ -33,5 +36,5 @@ SETTINGS = BotSettings(
     _settings["RUNTIME"]["DEBUG_MODE"],
     _settings["RUNTIME"]["INTERVAL"],
     _settings["RUNTIME"]["SLEEP_DURATION"],
-    _settings["OUTPUT"]["CSV_PATH"],
+    OUTPUT_CSV_PATH,
 )

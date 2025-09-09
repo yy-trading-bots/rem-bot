@@ -6,4 +6,3 @@ BASE_DIR = (
     if getattr(sys, "frozen", False)
     else Path(__file__).resolve().parent
 )
-print(BASE_DIR)
