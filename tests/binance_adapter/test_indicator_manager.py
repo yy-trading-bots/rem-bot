@@ -62,46 +62,6 @@ def test_fetch_price_returns_zero_when_unavailable(binance_client_mock):
     assert indicator_manager._fetch_price() == 0.0
 
 
-def test_get_historical_data_builds_times_and_tuple_shape(
-    monkeypatch, binance_client_mock
-):
-    fixed_now = datetime(2025, 8, 28, 12, 0, 0, tzinfo=timezone.utc)
-
-    # Patch module-level datetime.now() used inside _get_historical_data
-    class _FixedDatetime:
-        @staticmethod
-        def now():
-            return fixed_now
-
-    monkeypatch.setattr(
-        indicator_manager_module, "datetime", _FixedDatetime, raising=False
-    )
-
-    # Prepare two klines; function maps to (open, close, low, high)
-    kline_a = [0, "10", "13", "9", "12", "1", 0, "0", "0", "0", "0", "0"]
-    kline_b = [0, "12", "15", "11", "14", "1", 0, "0", "0", "0", "0", "0"]
-    binance_client_mock.get_klines.return_value = [kline_a, kline_b]
-
-    indicator_manager = IndicatorManager(binance_client_mock)
-    result = indicator_manager._get_historical_data(limit=2)
-
-    # Assert shape and ordering
-    assert result == [(10.0, 12.0, 9.0, 13.0), (12.0, 14.0, 11.0, 15.0)]
-
-    # Verify start/end ms calculations
-    expected_end = fixed_now
-    expected_start = expected_end - timedelta(minutes=15 * 2)
-    expected_end_ms = int(expected_end.timestamp() * 1000)
-    expected_start_ms = int(expected_start.timestamp() * 1000)
-
-    call_kwargs = binance_client_mock.get_klines.call_args.kwargs
-    assert call_kwargs["symbol"] == "BTCUSDT"
-    assert call_kwargs["interval"] == "1m"
-    assert call_kwargs["limit"] == 2
-    assert call_kwargs["startTime"] == expected_start_ms
-    assert call_kwargs["endTime"] == expected_end_ms
-
-
 def test_calculate_ema_with_provided_closes(monkeypatch, binance_client_mock):
     # Stub talib.EMA to return an array whose last element is distinctive
     def fake_ema(arr, timeperiod):
@@ -234,18 +194,12 @@ def test_fetch_indicators_integration_and_constructor_call(
         captured_params["rsi_close_len"] = len(close_prices)
         return 55.5
 
-    def spy_bar_list():
-        return [(10.0, 12.0, 9.0, 13.0)]
-
     def spy_price():
         return 555.0
 
     monkeypatch.setattr(indicator_manager, "_calculate_MACD", spy_macd)
     monkeypatch.setattr(indicator_manager, "_calculate_EMA", spy_ema)
     monkeypatch.setattr(indicator_manager, "_calculate_RSI", spy_rsi)
-    monkeypatch.setattr(
-        indicator_manager, "_get_historical_data", lambda: spy_bar_list()
-    )
     monkeypatch.setattr(indicator_manager, "_fetch_price", lambda: spy_price())
 
     # Fix date
@@ -282,6 +236,5 @@ def test_fetch_indicators_integration_and_constructor_call(
         "macd_26": 2.2,
         "ema_100": 100.5,
         "rsi_6": 55.5,
-        "bar_list": [(10.0, 12.0, 9.0, 13.0)],
     }
     assert snapshot.kwargs == expected

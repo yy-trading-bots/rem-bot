@@ -77,7 +77,6 @@ def test_save_result_appends_snapshot_rows_and_header_once(tmp_path: Path):
         macd_26=-2.0,
         ema_100=200.0,
         rsi_6=55.0,
-        bar_list=None,
     )
     s2 = MarketSnapshot(
         date="2025-08-29 01:00",
@@ -86,7 +85,6 @@ def test_save_result_appends_snapshot_rows_and_header_once(tmp_path: Path):
         macd_26=0.8,
         ema_100=198.0,
         rsi_6=48.0,
-        bar_list=None,
     )
 
     FileUtils.save_result(out, result="WIN", position="LONG", snapshot=s1)

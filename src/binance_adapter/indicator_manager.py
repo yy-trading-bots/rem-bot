@@ -67,36 +67,6 @@ class IndicatorManager:
             return float(ticker["price"])
         return 0.0
 
-    def _get_historical_data(
-        self, limit: int = 15
-    ) -> List[Tuple[float, float, float, float]]:
-        """
-        Retrieve OHLCV candlestick data for the configured symbol.
-
-        Args:
-            limit (int, optional): Number of candlesticks to fetch. Defaults to 15.
-
-        Returns:
-            List[Tuple[float, float, float, float]]: A list of tuples (open, close, low, high).
-        """
-        end_time = datetime.now()
-        start_time = end_time - timedelta(minutes=15 * limit)
-        start_time_ms = int(start_time.timestamp() * 1000)
-        end_time_ms = int(end_time.timestamp() * 1000)
-
-        klines = self.client.get_klines(
-            symbol=SETTINGS.SYMBOL,
-            interval=SETTINGS.INTERVAL,
-            limit=limit,
-            startTime=start_time_ms,
-            endTime=end_time_ms,
-        )
-
-        return [
-            (float(kline[1]), float(kline[4]), float(kline[3]), float(kline[2]))
-            for kline in klines
-        ]
-
     def _calculate_EMA(
         self, period: int, close_prices: Optional[np.ndarray] = None
     ) -> float:
@@ -185,5 +155,4 @@ class IndicatorManager:
             macd_26=temp_macd_26,
             ema_100=self._calculate_EMA(period=100, close_prices=close_prices),
             rsi_6=self._calculate_RSI(period=6, close_prices=close_prices),
-            bar_list=self._get_historical_data(),
         )
