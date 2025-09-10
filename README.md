@@ -9,7 +9,7 @@
 
 # RemBot
 
-> An automated cryptocurrency trading bot for **Binance** that combines **R**SI, **E**MA, and **M**ACD — the **REM** trio — to generate confluence-based LONG/SHORT signals.
+> An automated cryptocurrency trading bot for **Binance** that combines **R**SI, **E**MA, and **M**ACD — the **REM** trio — to detect confluence-based LONG/SHORT signals.
 
 ---
 
