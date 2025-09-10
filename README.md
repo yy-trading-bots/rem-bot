@@ -23,13 +23,13 @@ RemBot is a Python trading bot that connects to the Binance API and opens LONG o
 
 > **REM = RSI + EMA + MACD**
 
-A typical configuration uses:
+This bot relies on the following indicator set:
 
 - **Trend filter (EMA)** – Evaluates the price relative to the 100-period Exponential Moving Average (`EMA_100`) to determine whether the market bias is bullish or bearish.
 - **Momentum (MACD)** – Uses the relationship between the MACD line and the signal line to assess both the direction and strength of the trend.
 - **Momentum (RSI)** – Applies a short-period RSI threshold around the 50 level to confirm the momentum direction and filter out false signals.
 
-**Decision conditions (pseudocode):**
+**Position entry conditions (pseudocode):**
 
 ```py
 while True:
@@ -39,15 +39,13 @@ while True:
         enter_short()
 ```
 
-> You can tune lookback windows, thresholds, and scheduling via configuration.
-
----
-
 For a video explanation of the strategy, you may see the video below. (The video does not belong to this repository or organisation)
 
 <div align="center">
   <a href="https://www.youtube.com/watch?v=Gs-_tleyz3Q&ab_channel=TRADEEMPIRE"><img src="assets/strategy.jpg" alt="Strategy Reference" width="600"> </a>
 </div>
+
+---
 
 ## ⚙️ Configuration
 
