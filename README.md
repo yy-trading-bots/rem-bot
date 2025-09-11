@@ -33,9 +33,9 @@ This bot relies on the following indicator set:
 
 ```py
 while True:
-    if price > EMA_100 and MACD_line crosses_above signal and RSI > 50:
+    if price < EMA_100 and MACD_12 > MACD_26 and MACD_12 < 0 and RSI_6 > 50:
         enter_long()
-    elif price < EMA_100 and MACD_line crosses_below signal and RSI < 50:
+    elif price > EMA_100 and MACD_12 < MACD_26 and MACD_12 > 0  and RSI_6 < 50:
         enter_short()
 ```
 
